@@ -197,6 +197,8 @@ vec_sex
     ## Levels: male female
 
 ``` r
+#make male as first level and female becomes second level, to relevel
+
 as.numeric(vec_sex)
 ```
 
@@ -219,19 +221,31 @@ need to tidy this!
 ``` r
 marj_df =
   table_marj |> 
-  select(-contains("P Value")) |> 
+  select(-contains("P Value")) |> # remove the columns that dont want
   pivot_longer(
     -State,
     names_to = "age_year",
-    values_to = "percent"
+    values_to = "percent" 
   ) |> 
-  separate(age_year, into = c("age", "year"), "\\(") |> 
+  separate(age_year, into = c("age", "year"), sep = "\\(") |> 
   mutate(
     year = str_replace(year, "\\)", ""),
-    percent = str_replace(percent, "[a-b]", ""),
+    percent = str_replace(percent, "[a-b]$", ""),
     percent = as.numeric(percent)) |> 
   filter(!(State %in% c("Total U.S.", "Northeast", "Midwest", "South", "West")))
+
+#1. for the pivot section until the "values_to' this: pivot everything that isnt in the State column (want everything that isn State needs to be converted from wide to long, rename "age_year" with values; before that, this shows State with ordered and only State, age_year, and percent these three columns)
+
+#2. separate the variable age_year, notice that we need to take more specific about what to separate sep = 
+
+#3. use mutate to update the year variable, the way to do that is to find the pattern "\\)" and replace it with nothing----using str_replace
+
+# continue the mutate function, about percent variable, we know that we want to skip a,b,c after the numbers, so we use str_replace function to find [a-c], and we know that they occurs at the end, so we can add $, and if find, replace nothing
+
+#4. filter function shows that we dont want State variable to be one of either total_us, northest, midwest, south, west
 ```
+
+## NSDUH — factors
 
 ``` r
 marj_df |> 
@@ -243,6 +257,10 @@ marj_df |>
 ```
 
 <img src="Strings_and_factors_files/figure-gfm/unnamed-chunk-12-1.png" width="90%" />
+
+``` r
+#fct_reorder: need to tell what variable need to reorder, this function would take the median value of the same category from different year (for example, Alabama in 2013, and 2014, there are different percent, in this case, this would show the midian of them)
+```
 
 ## NYC Restaurant Inspections
 
