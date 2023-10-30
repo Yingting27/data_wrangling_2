@@ -357,6 +357,10 @@ inspection_df |>
 <img src="Strings_and_factors_files/figure-gfm/unnamed-chunk-18-1.png" width="90%" />
 
 ``` r
+#fct_infreq function is used to reorder the levels of a factor in a way that the most frequent level comes first
+```
+
+``` r
 inspection_df |> 
   filter(str_detect(dba, "PIZZA")) |> 
   mutate(
@@ -367,3 +371,7 @@ inspection_df |>
 ```
 
 <img src="Strings_and_factors_files/figure-gfm/unnamed-chunk-19-1.png" width="90%" />
+
+``` r
+# fct_recode: rename Manhattan into The City, this doesn work by using fct_replace as Factors have very specific values, trying to use a value that is not an existing factor level won’t work.
+```
